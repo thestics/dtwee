@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="w-50 pt-5">
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" style="padding: 15px 20px 20px 20px" role="alert">
+            <div style="display: flex; justify-content: right">
+                <button type="button" style="background: none; border: none" class="close" data-dismiss="alert" aria-label="Close" onclick="$('.alert').alert('close')">
+                    <span aria-hidden="true" style="color: rgba(255,255,255,0.75)">&times;</span>
+                </button>
+            </div>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+    <form action="/edit-user/" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+        <div class="form-outline mb-4">
+            <input type="text" id="registerName" class="form-control" name="first_name" value="{{ form.instance.first_name }}"/>
+            <label class="form-label" for="registerName">First name</label>
+        </div>
+
+        <div class="form-outline mb-4">
+            <input type="text" id="registerName" class="form-control" name="last_name" value="{{ form.instance.last_name }}"/>
+            <label class="form-label" for="registerName">Last name</label>
+        </div>
+
+        <!-- Username input -->
+        <div class="form-outline mb-4">
+            <input type="text" id="registerUsername" class="form-control" name="username" value="{{ form.instance.username }}"/>
+            <label class="form-label" for="registerUsername">Username</label>
+        </div>
+
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input type="email" id="registerEmail" class="form-control" name="email" value="{{ form.instance.email }}"/>
+            <label class="form-label" for="registerEmail">Email</label>
+        </div>
+
+
+        {% if form.instance.ext is not none and form.instance.ext.avatar is not none %}
+            <div id="user-avatar" class="p-3" style="display: flex; align-items: flex-start">
+                <img src="/media{{ form.instance.ext.avatar.url }}" alt="" class="rounded-circle shadow-4 avatar-profile">
+
+                {% if not form.instance.ext.is_avatar_default %}
+                    <button id="remove_avatar_button" style="background: none; border: none">
+                        <span aria-hidden="true" style="color: rgba(255,255,255,0.75)">&times;</span>
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <input type="hidden" name="remove_avatar" id="remove_avatar_input" value="False">
+
+        <div class="form-outline mb-3">
+            <input class="form-control" type="file" alt="ava" id="formFile" name="avatar">
+            <label for="formFile" class="form-label">Avatar</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mb-4">Save changes</button>
+
+    </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $('#remove_avatar_button').click((event) => {
+            event.preventDefault()
+            $('#remove_avatar_input').attr('value', 'True')
+            $('#user-avatar').remove()
+        })
+    </script>
+{% endblock %}

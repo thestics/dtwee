@@ -1,6 +1,17 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
+
+class TweeUser(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='ext'
+    )
+    avatar = models.FileField(upload_to='avatars')
+
+    @property
+    def is_avatar_default(self):
+        return self.avatar.name == settings.DEFAULT_AVATAR_NAME
 
 class Tweet(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

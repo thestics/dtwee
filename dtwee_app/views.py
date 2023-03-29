@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.html import escape
 
+from dtwee_app.form import UserEditForm
 from dtwee_app.models import Tweet
 from dtwee_app.render import render_macro
 from dtwee_app.services import like, retweet, reply_to
@@ -12,11 +13,23 @@ from dtwee_app.services import like, retweet, reply_to
 
 @login_required(login_url='login/')
 def home(request):
-    if not request.user.is_authenticated:
-        return redirect(reverse(login_view))
-
     ts = Tweet.objects.prefetch_related('author').order_by('-created_at')
     return render(request, 'home.html', context={'tweets': ts})
+
+
+@login_required(login_url='login/')
+def profile(request):
+    f = UserEditForm(instance=request.user)
+    return render(request, 'profile.html', {'form': f})
+
+
+@login_required(login_url='login/')
+def edit_user(request):
+    f = UserEditForm(request.POST, request.FILES, instance=request.user)
+    if not f.is_valid():
+        return render(request, 'profile.html', {'form': f})
+    f.save()
+    return render(request, 'profile.html', {'form': f})
 
 
 def login_view(request):
@@ -48,7 +61,6 @@ def add_tweet(request):
     if request.method == 'POST':
         if 'tweet_input' not in request.POST:
             return HttpResponse('`tweet_input` is a required param', 'text/plain', 400)
-    print(request.POST)
     reply = Tweet.objects.create(
         text=escape(request.POST['tweet_input']),
         author=request.user

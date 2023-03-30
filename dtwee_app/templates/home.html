@@ -2,56 +2,59 @@
 
 {% macro tweet(t) %}
     <div class="card m-4 p-4 tweet-box" style="max-width: 64rem">
-        <div class="tweet-data">
-            <div class="tweet-header" style="display: flex; align-items: center">
-                <img src="/media{{ t.author.ext.avatar.url }}" alt="" class="rounded-circle shadow-4"
-                     style="width: 50px; height: 50px; object-fit: cover">
-                <div style="display: flex; margin-left: 10px">
-                    <p>
-                        {{ t.author.first_name }} {{ t.author.last_name }}
-                    </p>
-                    <p class="align-middle p-0"
-                       style="margin: 0 0 0 10px; color: rgba(255, 255, 255, 0.4)">@{{ t.author.username if t.author is not none else 'N/A' }}</p>
+        <div class="tweet-data" style="display: flex; justify-content: start">
+            <div style="">
+                <img src="/media{{ t.author.ext.avatar.url }}" alt="" class="rounded-circle shadow-4" style="width: 50px; height: 50px; object-fit: cover">
+                <div class="vertical-new" style="margin-left: auto; margin-right: auto"></div>
+            </div>
+            <div>
+                <div class="tweet-header" style="display: flex; align-items: center">
+                    <div style="display: flex; margin-left: 10px">
+                        <p>
+                            {{ t.author.first_name }} {{ t.author.last_name }}
+                        </p>
+                        <p class="align-middle p-0"
+                           style="margin: 0 0 0 10px; color: rgba(255, 255, 255, 0.4)">@{{ t.author.username if t.author is not none else 'N/A' }}</p>
+                    </div>
+                </div>
+                <div class="tweet-content" style="display: flex">
+                    <p class="tweet-message-text">{{ t.text }}</p>
+                </div>
+                <div class="tweet-actions" style="">
+                    <input type="hidden" name="tweet_id" id="{{ t.id }}" value="{{ t.id }}">
+                    <button class="tweet-action tweet-reply"
+                            data-bs-toggle="modal"
+                            data-bs-target="#tweetReplyModal">
+                        <i class="fa-regular fa-comment"></i> {{ t.reply_count }}
+                    </button>
+                    <button class="tweet-action"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                            hx-post="/retweet/"
+                            hx-swap="outerHTML"
+                            hx-target="closest .tweet-box"
+                            hx-include="[id='{{ t.id }}']">
+                        <i class="fa-solid fa-repeat"
+                           {% if t.retweeted_by_user(request.user) %}
+                                style="color: #02b100"
+                           {% endif %}
+                                >
+                        </i> {{ t.retweet_count }}
+                    </button>
+                    <button class="tweet-action"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                            hx-post="/like-tweet/"
+                            hx-swap="outerHTML"
+                            hx-target="closest .tweet-box"
+                            hx-include="[id='{{ t.id }}']">
+                        <i {% if t.liked_by_user(request.user) %}
+                                class="fa-solid fa-heart" style="color: red">
+                           {% else %}
+                                class="fa-regular fa-heart">
+                           {% endif %}</i>
+                        {{ t.like_count }}
+                    </button>
                 </div>
             </div>
-            <div class="tweet-content" style="display: flex">
-                <div class="vertical-new" style="margin: 5px 0 0 23px; visibility: hidden"></div>
-                <p class="tweet-message-text" style="margin: 0 25px 10px 35px;">{{ t.text }}</p>
-            </div>
-        </div>
-        <div class="tweet-actions" style="margin-left: 35px">
-            <input type="hidden" name="tweet_id" id="{{ t.id }}" value="{{ t.id }}">
-            <button class="tweet-action tweet-reply"
-                    data-bs-toggle="modal"
-                    data-bs-target="#tweetReplyModal">
-                <i class="fa-regular fa-comment"></i> {{ t.reply_count }}
-            </button>
-            <button class="tweet-action"
-                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-                    hx-post="/retweet/"
-                    hx-swap="outerHTML"
-                    hx-target="closest .tweet-box"
-                    hx-include="[id='{{ t.id }}']">
-                <i class="fa-solid fa-repeat"
-                   {% if t.retweeted_by_user(request.user) %}
-                        style="color: #02b100"
-                   {% endif %}
-                        >
-                </i> {{ t.retweet_count }}
-            </button>
-            <button class="tweet-action"
-                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-                    hx-post="/like-tweet/"
-                    hx-swap="outerHTML"
-                    hx-target="closest .tweet-box"
-                    hx-include="[id='{{ t.id }}']">
-                <i {% if t.liked_by_user(request.user) %}
-                        class="fa-solid fa-heart" style="color: red">
-                   {% else %}
-                        class="fa-regular fa-heart">
-                   {% endif %}</i>
-                {{ t.like_count }}
-            </button>
         </div>
     </div>
 {% endmacro %}

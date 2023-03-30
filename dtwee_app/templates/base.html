@@ -44,22 +44,36 @@
             width: 250px; height: 250px; object-fit: cover
         }
 
+        .sidebar {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100svh
+        }
+
+        .nav-icon {
+            padding-top: 10px;
+            width: 22px;
+            display: flex;
+            justify-content: center
+        }
+
         div.nav-link {
             display: flex;
             margin-left: 5px;
             padding-top: 0;
         }
 
-        body {
-            padding-top: 90px
+        a.nav-link {
+            margin-left: 10px;
         }
 
-        body {
-            padding-top: 0
-        }
-
-        body {
-            margin-left: 232px
+        .feed {
+            width: 600px;
         }
 
         .navbar.fixed-left {
@@ -116,47 +130,92 @@
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="container w-75">
-<nav class="navbar navbar-expand-md navbar-dark fixed-left">
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <div class="nav-link">
-                    <i class="fa-solid fa-house" style="padding-top: 10px"></i>
-                    <a href="/" class="nav-link">Home</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="nav-link">
-                    <i class="fa-solid fa-bell" style="padding-top: 10px"></i>
-                    <a href="/notifications" class="nav-link">Notifications</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="nav-link">
-                    <i class="fa-solid fa-envelope"
-                       style="padding-top: 10px"></i>
-                    <a href="/messages" class="nav-link">Messages</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="nav-link">
-                    <i class="fa-solid fa-user" style="padding-top: 10px"></i>
-                    <a href="/my-profile" class="nav-link">Profile</a>
-                </div>
-            </li>
-            <li>
-                <button class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModalCenter"
-                        style="border-radius: 20px; min-width: 140px; margin-top: 10px">
-                    Tweet
-                </button>
-            </li>
-        </ul>
+<body>
+<div class="app" style="display: flex; justify-content: center; margin-left: -200px">
+    <div class="sidebar" style="">
+        <div style="flex-direction: column; display: flex; padding-top: 30px">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="fa-solid fa-house nav-icon"></i>
+                        <a href="/" class="nav-link">Home</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="fa-solid fa-bell nav-icon"></i>
+                        <a href="/notifications" class="nav-link">Notifications</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="fa-solid fa-envelope nav-icon"></i>
+                        <a href="/messages" class="nav-link"> Messages</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link">
+                        <i class="fa-solid fa-user nav-icon"></i>
+                        <a href="/my-profile" class="nav-link">Profile</a>
+                    </div>
+                </li>
+                <li>
+                    <button class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModalCenter"
+                            style="border-radius: 20px; min-width: 140px; margin-top: 10px">
+                        Tweet
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <p>PLACEHOLDER</p>
+        </div>
     </div>
-</nav>
+    <div class="feed">
+        {% block body %}
+        {% endblock %}
+    </div>
+</div>
 
-{% block body %}{% endblock %}
+{#<nav class="navbar navbar-expand-md navbar-dark fixed-left">#}
+{#    <div class="collapse navbar-collapse" id="navbarsExampleDefault">#}
+{#        <ul class="navbar-nav">#}
+{#            <li class="nav-item">#}
+{#                <div class="nav-link">#}
+{#                    <i class="fa-solid fa-house" style="padding-top: 10px"></i>#}
+{#                    <a href="/" class="nav-link">Home</a>#}
+{#                </div>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#                <div class="nav-link">#}
+{#                    <i class="fa-solid fa-bell" style="padding-top: 10px"></i>#}
+{#                    <a href="/notifications" class="nav-link">Notifications</a>#}
+{#                </div>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#                <div class="nav-link">#}
+{#                    <i class="fa-solid fa-envelope"#}
+{#                       style="padding-top: 10px"></i>#}
+{#                    <a href="/messages" class="nav-link">Messages</a>#}
+{#                </div>#}
+{#            </li>#}
+{#            <li class="nav-item">#}
+{#                <div class="nav-link">#}
+{#                    <i class="fa-solid fa-user" style="padding-top: 10px"></i>#}
+{#                    <a href="/my-profile" class="nav-link">Profile</a>#}
+{#                </div>#}
+{#            </li>#}
+{#            <li>#}
+{#                <button class="btn btn-primary" data-bs-toggle="modal"#}
+{#                        data-bs-target="#exampleModalCenter"#}
+{#                        style="border-radius: 20px; min-width: 140px; margin-top: 10px">#}
+{#                    Tweet#}
+{#                </button>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{#</nav>#}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
